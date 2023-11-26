@@ -55,6 +55,7 @@ def create_http_response(data_json: dict, status_code: int) -> bytes:
     response_json = json.dumps(data_json)
     response = f"HTTP/1.1 {status_code} {status_codes[status_code]}\r\n"
     response += "Content-Type: application/json\r\n"
-    response += f"Content-Length: {len(response_json)}\r\n\r\n"
+    response += f"Content-Length: {len(response_json)}\r\n"
+    response += "\r\n"
     response += response_json
     return response.encode('utf-8')
