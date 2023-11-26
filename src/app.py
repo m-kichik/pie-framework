@@ -1,5 +1,7 @@
+import asyncio
 from typing import Dict
 from urllib.parse import urlparse
+from server import Server
 
 
 class Application:
@@ -12,10 +14,10 @@ class Application:
         pass
 
     def run_server(self):
-        pass
+        srv = Server()
+        asyncio.run(srv.run())
 
     def handle_request(self, url):
         parsed_url = urlparse(url)
         response = self.routes[url]
         return response
-
