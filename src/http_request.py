@@ -21,8 +21,11 @@ def parse_http_request(data_binary: bytes) -> dict:
     # Разбираем тело запроса
     if method == 'GET':
         # Если это GET-запрос, параметры передаются в URL
-        path, query_string = path.split('?', 1)
-        parameters = parse_qs(query_string)
+        if '?' in path:
+            path, query_string = path.split('?', 1)
+            parameters = parse_qs(query_string)
+        else:
+            parameters = {}
     elif method == 'POST':
         # Если это POST-запрос, параметры могут быть в различных форматах
         content_type = None

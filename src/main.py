@@ -4,15 +4,25 @@ from http import HTTPStatus
 
 
 # example of usage:
-def get_users() -> tuple[list, int]:
+
+def root() -> tuple[dict, HTTPStatus]:
+    return {
+        "message": "Welcome to the Pie Framework!",
+        "description": "Pie is a lightweight and flexible Python web framework for building web applications.",
+        "version": "1.0.0",
+    }, HTTPStatus.OK
+
+
+def get_users() -> tuple[list, HTTPStatus]:
     return [{"name": "Test User", "age": 10}], HTTPStatus.OK
 
 
-def create_user(name: str, age: int) -> tuple[dict, int]:
+def create_user(name: str, age: int) -> tuple[dict, HTTPStatus]:
     return {"resp": "ok"}, HTTPStatus.OK
 
 
 app = Dispatcher()
+app.register_route(method="GET", path="/", handler=root)
 app.register_route(method="GET", path="/get_users/", handler=get_users)
 app.register_route(method="POST", path="/create_user/", handler=create_user)
 
