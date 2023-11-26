@@ -1,23 +1,21 @@
-import asyncio
-from typing import Dict
-from urllib.parse import urlparse
-from server import Server
+import inspect
+from typing import Dict, Callable, Literal, Awaitable
 
 
-class Application:
+class Dispatcher:
+
     def __init__(self):
-        self.routes: Dict[str, callable] = {}
-        pass
+        self.routes: Dict[tuple[str, str], Callable | Awaitable] = {}
 
-    def register_route(self, url, method):
-        self.routes[url] = method
-        pass
+    def register_route(self, method: Literal['GET', 'POST'], path: str, handler: Callable | Awaitable) -> None:
+        if (method, path) in self.routes:
+            raise ValueError(f"Handler {method=} {path=} already registered")
+        self.routes[(method, path)] = handler
 
-    def run_server(self):
-        srv = Server()
-        asyncio.run(srv.run())
-
-    def handle_request(self, url):
-        parsed_url = urlparse(url)
-        response = self.routes[url]
-        return response
+    async def handle_request(self, method: str, path: str, params: dict) -> tuple[dict, int]:
+        if (method, path) not in self.routes:
+            return {"error": "Not found"}, 404
+        handler = self.routes[(method, path)]
+        if inspect.isawaitable(handler):
+            return await handler(**params)
+        return handler(**params)

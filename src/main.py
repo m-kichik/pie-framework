@@ -1,5 +1,13 @@
-from src.app import Application
+from app import Dispatcher
+from server import HttpServer
 
-if __name__ == '__main__':
-    app = Application()
-    app.run_server()
+
+# example of usage:
+def get_user(name: str) -> dict:
+    return {"username": "Name"}
+
+
+app = Dispatcher()
+app.register_route(method="GET", path="/api/users/", handler=get_user)
+server = HttpServer(host="127.0.0.1", port=8080, app=app)
+server.run_forever()
