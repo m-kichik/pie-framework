@@ -15,8 +15,13 @@ class HttpServer:
         print(f"Accepted connection from {address}")
 
         request_data = await reader.read(4096)
-        print(f"Received data: {request_data.decode('utf-8')}")
-        parsed_request = parse_http_request(request_data)
+        print(f"\tReceived data: {request_data.decode('utf-8')}")
+        try:
+            parsed_request = parse_http_request(request_data)
+        except Exception as ex:
+            print(f"Can't parse HTTP request, reason: {ex}")
+            parsed_request = {"error": "Can't parse HTTP request"}, 404
+        print(f"{parsed_request=}")
 
         response, status_code = await self.app.handle_request(**parsed_request)
         response_data = create_http_response(response, status_code=status_code)
@@ -31,7 +36,7 @@ class HttpServer:
         server = await asyncio.start_server(
             self.handle_client, self.host, self.port
         )
-        print("Server listening on port 8080")
+        print(f"Server listening on port {self.port}")
 
         async with server:
             await server.serve_forever()

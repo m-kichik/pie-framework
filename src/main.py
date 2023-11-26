@@ -9,5 +9,5 @@ def get_user(name: str) -> dict:
 
 app = Dispatcher()
 app.register_route(method="GET", path="/api/users/", handler=get_user)
-server = HttpServer(host="127.0.0.1", port=8080, app=app)
+server = HttpServer(host="127.0.0.1", port=8000, app=app)
 server.run_forever()

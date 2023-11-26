@@ -12,10 +12,10 @@ class Dispatcher:
             raise ValueError(f"Handler {method=} {path=} already registered")
         self.routes[(method, path)] = handler
 
-    async def handle_request(self, method: str, path: str, params: dict) -> tuple[dict, int]:
+    async def handle_request(self, method: str, path: str, data: dict) -> tuple[dict, int]:
         if (method, path) not in self.routes:
             return {"error": "Not found"}, 404
         handler = self.routes[(method, path)]
         if inspect.isawaitable(handler):
-            return await handler(**params)
-        return handler(**params)
+            return await handler(**data)
+        return handler(**data)
