@@ -1,10 +1,9 @@
 import inspect
-from typing import Callable, Literal, Awaitable
+from typing import Awaitable, Callable, Literal
 
 
 class Dispatcher:
-
-    def __init__(self):
+    def __init__(self) -> None:
         self.routes: dict[tuple[str, str], Callable | Awaitable] = {}
 
     def register_route(self, method: Literal['GET', 'POST'], path: str, handler: Callable | Awaitable) -> None:

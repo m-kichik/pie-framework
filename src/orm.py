@@ -1,5 +1,5 @@
-import sqlite3
 import pathlib
+import sqlite3
 
 
 class BaseType:
@@ -63,7 +63,6 @@ class Model:
 
     @classmethod
     def create_entity(cls, update=False):
-
         cursor = cls.connection.cursor()
 
         fields = ""

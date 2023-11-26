@@ -1,8 +1,9 @@
 import json
-from urllib.parse import parse_qs
 from http import HTTPStatus
+from urllib.parse import parse_qs
 
 status_codes = {s.value: s.phrase for s in HTTPStatus}
+
 
 def parse_http_request(data_binary: bytes) -> dict:
     # TODO: do it

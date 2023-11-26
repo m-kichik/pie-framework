@@ -1,13 +1,12 @@
 import asyncio
 import traceback
-
-from src.http_request import parse_http_request, create_http_response
-from src.app import Dispatcher
 from http import HTTPStatus
+
+from src.app import Dispatcher
+from src.http_request import create_http_response, parse_http_request
 
 
 class HttpServer:
-
     def __init__(self, host: str, port: int, app: Dispatcher) -> None:
         self.host = host
         self.port = port
@@ -35,11 +34,10 @@ class HttpServer:
         writer.close()
 
     async def run_server(self):
-        server = await asyncio.start_server(
-            self.handle_client, self.host, self.port
+        server = await asyncio.start_server(self.handle_client, self.host, self.port)
+        welcome_message = (
+            "* Serving Pie-framework app \n" f"* Running on http://{self.host}:{self.port}/ (Press CTRL+C to quit)"
         )
-        welcome_message = ("* Serving Pie-framework app \n"
-                           f"* Running on http://{self.host}:{self.port}/ (Press CTRL+C to quit)")
         print(welcome_message)
 
         async with server:
