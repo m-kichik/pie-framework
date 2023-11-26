@@ -1,8 +1,8 @@
 from src.app import Application
 from src.server import Server
 
-def get_hello_world(json_data, **query_params):
-    return f'get hello world with {json_data=}, {query_params=}'
+def get_hello_world(**query_params):
+    return f'get hello world with {query_params=}'
 
 def post_hello_world(json_data, **query_params):
     return f'post hello world{json_data=}, {query_params=}'
