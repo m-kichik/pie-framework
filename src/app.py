@@ -19,7 +19,7 @@ def singleton(class_):
 
 
 @singleton
-class Application:
+class Dispatcher:
     def __init__(self):
         self.routes: Dict[str, callable] = {}
 
