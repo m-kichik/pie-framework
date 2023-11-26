@@ -1,8 +1,8 @@
 import asyncio
 import traceback
 
-from http_request import parse_http_request, create_http_response
-from app import Dispatcher
+from src.http_request import parse_http_request, create_http_response
+from src.app import Dispatcher
 from http import HTTPStatus
 
 
