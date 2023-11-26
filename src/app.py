@@ -1,7 +1,6 @@
-from http import HTTPStatus
 import inspect
+from http import HTTPStatus
 from typing import Dict
-from urllib.parse import urlparse
 
 
 class HandlerResultError(Exception):
@@ -53,14 +52,14 @@ class Application:
 
         if not isinstance(responce, tuple):
             raise HandlerResultError(f"Handler returned {type(responce)}")
-        elif len(responce) != 2:
+        if len(responce) != 2:
             rettypes = " ".join([str(type(item)) for item in responce])
             raise HandlerResultError(f"Handler returned ({rettypes})")
-        elif not isinstance(responce[1], int):
-            raise HandlerResultError(f"Handler returned non-int status code")
-        elif not (isinstance(responce[0], dict) or isinstance(responce[0], list)):
+        if not isinstance(responce[1], int):
+            raise HandlerResultError("Handler returned non-int status code")
+        if not isinstance(responce[0], (dict, list)):
             raise HandlerResultError(
                 f"Handler returned {type(responce[0])} as first argument"
             )
-        else:
-            return responce
+
+        return responce
