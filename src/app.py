@@ -1,9 +1,7 @@
+from http import HTTPStatus
 import inspect
 from typing import Dict
 from urllib.parse import urlparse
-from http import HTTPStatus
-
-# from responce import Response
 
 
 class HandlerResultError(Exception):
@@ -40,7 +38,6 @@ class Application:
     ) -> None:
         if (method, path) not in self.routes:
             return {"error": "Not found"}, 404
-            # return Response(status=404, reason='Not Found')
 
         handler = self.routes[(method, path)]
 
