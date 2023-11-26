@@ -24,13 +24,13 @@ class Application:
     def run_server(self):
         pass
 
-    async def handle_request(self, method:str, path:str, params:dict) -> None :
+    async def handle_request(self, json_data:dict,  method:str, path:str, params:dict) -> None :
         if (method, path) not in self.routes:
             return Response(status=404, reason='Not Found')
         
         handler = self.routes[(method, path)]
         
-        response = handler(**params)
+        response = handler(json_data, **params)
         if isinstance(response, dict):
             return Response(status=response.get('status'),
                             reason=response.get('reason'),
