@@ -4,7 +4,6 @@ from http import HTTPStatus
 
 status_codes = {s.value: s.phrase for s in HTTPStatus}
 
-
 def parse_http_request(data_binary: bytes) -> dict:
     # TODO: do it
     """Парсинг бинарного HTTP запроса."""
@@ -22,11 +21,8 @@ def parse_http_request(data_binary: bytes) -> dict:
     # Разбираем тело запроса
     if method == 'GET':
         # Если это GET-запрос, параметры передаются в URL
-        if "?" in path:
-            path, query_string = path.split('?', 1)
-            parameters = parse_qs(query_string)
-        else:
-            parameters = {}
+        path, query_string = path.split('?', 1)
+        parameters = parse_qs(query_string)
     elif method == 'POST':
         # Если это POST-запрос, параметры могут быть в различных форматах
         content_type = None
@@ -39,7 +35,8 @@ def parse_http_request(data_binary: bytes) -> dict:
             # Если Content-Type указывает на JSON, парсим JSON данные
             parameters = json.loads(body)
         else:
-            raise NotImplementedError()
+            # В противном случае, парсим параметры как строки запроса
+            parameters = parse_qs(body)
     else:
         raise NotImplementedError()
 
@@ -51,11 +48,10 @@ def parse_http_request(data_binary: bytes) -> dict:
 
 
 def create_http_response(data_json: dict, status_code: int) -> bytes:
-    """Сериализация HTTP запроса в бинарные данные."""
     response_json = json.dumps(data_json)
     response = f"HTTP/1.1 {status_code} {status_codes[status_code]}\r\n"
     response += "Content-Type: application/json\r\n"
     response += f"Content-Length: {len(response_json)}\r\n"
     response += "\r\n"
-    response += response_json
+    response += response_json + "\r\n\r\n"
     return response.encode('utf-8')
