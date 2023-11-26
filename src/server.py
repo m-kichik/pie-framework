@@ -36,7 +36,9 @@ class HttpServer:
         server = await asyncio.start_server(
             self.handle_client, self.host, self.port
         )
-        print(f"Server listening on port {self.port}")
+        welcome_message = ("* Serving Pie-framework app \n"
+                           f"* Running on http://{self.host}:{self.port}/ (Press CTRL+C to quit)")
+        print(welcome_message)
 
         async with server:
             await server.serve_forever()
