@@ -1,6 +1,6 @@
 import inspect
 from http import HTTPStatus
-from typing import Dict
+from typing import Dict Callable, Literal, Awaitable
 
 
 class HandlerResultError(Exception):
@@ -21,20 +21,18 @@ def singleton(class_):
 @singleton
 class Dispatcher:
     def __init__(self):
-        self.routes: Dict[str, callable] = {}
+        self.routes: dict[tuple[str, str], Callable | Awaitable] = {}
 
         self.status_codes = {s.value: s.phrase for s in HTTPStatus}
 
-    def register_route(self, url, handler, method):
-        self.routes[url] = method
-        pass
-
-    def run_server(self):
-        pass
+    def register_route(self, method: Literal['GET', 'POST'], path: str, handler: Callable | Awaitable) -> None:
+        if (method, path) in self.routes:
+            raise ValueError(f"Handler {method=} {path=} already registered")
+        self.routes[(method, path)] = handler
 
     async def handle_request(
         self, json_data: dict, method: str, path: str, params: dict
-    ) -> None:
+    ) -> tuple[dict, int]:
         if (method, path) not in self.routes:
             return {"error": "Not found"}, 404
 
