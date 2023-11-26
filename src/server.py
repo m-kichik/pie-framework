@@ -18,12 +18,12 @@ class HttpServer:
         print(f"\tReceived data: {request_data.decode('utf-8')}")
         try:
             parsed_request = parse_http_request(request_data)
+            print(f"{parsed_request=}")
+            response, status_code = await self.app.handle_request(**parsed_request)
         except Exception as ex:
             print(f"Can't parse HTTP request, reason: {ex}")
-            parsed_request = {"error": "Can't parse HTTP request"}, 404
-        print(f"{parsed_request=}")
+            response, status_code = {"error": "Can't parse HTTP request"}, 404
 
-        response, status_code = await self.app.handle_request(**parsed_request)
         response_data = create_http_response(response, status_code=status_code)
         writer.write(response_data)
         await writer.drain()
